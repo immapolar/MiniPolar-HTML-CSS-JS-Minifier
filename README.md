@@ -2,7 +2,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/Node-%3E%3D16.0.0-brightgreen)](https://nodejs.org)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-No-red.svg)](https://github.com/yourusername/polaris/graphs/commit-activity)
 
 A minification tool designed to optimize web assets while preserving important development features like React components, template syntax, and code examples.
 
