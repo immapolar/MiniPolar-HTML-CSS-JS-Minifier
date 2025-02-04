@@ -21,7 +21,7 @@ A minification tool designed to optimize web assets while preserving important d
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/polaris.git
+git clone https://github.com/immapolar/MiniPolar-HTML-CSS-JS-Minifier
 
 # Install dependencies
 npm install
