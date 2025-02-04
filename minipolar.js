@@ -17,7 +17,6 @@ async function minifyJavaScript(inputPath, outputPath) {
     try {
         const code = await fs.readFile(inputPath, 'utf8');
         
-        // Check if file contains code examples or React content
         const hasCodeExamples = code.includes('code:') || 
                               code.includes('`') ||
                               code.includes('language-');
@@ -30,7 +29,7 @@ async function minifyJavaScript(inputPath, outputPath) {
         const terserOptions = {
             compress: {
                 dead_code: true,
-                drop_console: false, // Keep console logs for code examples
+                drop_console: false,
                 drop_debugger: true,
                 passes: 2,
                 keep_classnames: hasReactContent,
@@ -40,7 +39,7 @@ async function minifyJavaScript(inputPath, outputPath) {
             },
             mangle: {
                 toplevel: !hasReactContent && !hasCodeExamples,
-                properties: false, // Don't mangle properties to preserve code examples
+                properties: false,
                 keep_classnames: true,
                 keep_fnames: true
             },
@@ -48,7 +47,7 @@ async function minifyJavaScript(inputPath, outputPath) {
                 comments: false,
                 quote_style: 1,
                 preserve_annotations: true,
-                beautify: hasCodeExamples, // Keep code examples readable
+                beautify: hasCodeExamples,
                 keep_quoted_props: true
             },
             nameCache: hasReactContent ? {} : null,
@@ -99,35 +98,35 @@ async function minifyHTML(inputPath, outputPath) {
             collapseWhitespace: true,
             removeComments: true,
             removeEmptyAttributes: true,
-            removeRedundantAttributes: false, // Don't remove potentially important attributes
+            removeRedundantAttributes: false,
             removeScriptTypeAttributes: true,
             removeStyleLinkTypeAttributes: true,
             minifyCSS: true,
             minifyJS: true,
             useShortDoctype: true,
             ignoreCustomFragments: [
-                /<%[\s\S]*?%>/,         // EJS
-                /<\?[\s\S]*?\?>/,       // PHP-style
-                /\{\{[\s\S]*?\}\}/,     // Handlebars/Mustache/Vue
-                /{%[\s\S]*?%}/,         // Liquid/Django/Nunjucks
-                /\${[\s\S]*?}/,         // Template literals
-                /<jsx>[\s\S]*?<\/jsx>/, // Custom JSX blocks
-                /(?<=^|\s)\.[\w-]+\s*{[\s\S]*?}/, // CSS class definitions in JS
-                /(?<=^|\s)#[\w-]+\s*{[\s\S]*?}/, // CSS ID definitions in JS
-                /(?<=^|\s)@\w+[\s\S]*?{[\s\S]*?}/, // CSS @rules in JS
-                /React\.createElement\([\s\S]*?\)/, // React.createElement
-                /const\s+\w+\s*=\s*styled\.[\s\S]*?`[\s\S]*?`/, // Styled-components
-                /import\s+.*\s+from\s+['"].*['"]/, // Import statements
-                /export\s+.*{[\s\S]*?}/ // Export statements
+                /<%[\s\S]*?%>/,
+                /<\?[\s\S]*?\?>/,
+                /\{\{[\s\S]*?\}\}/,
+                /{%[\s\S]*?%}/,
+                /\${[\s\S]*?}/,
+                /<jsx>[\s\S]*?<\/jsx>/,
+                /(?<=^|\s)\.[\w-]+\s*{[\s\S]*?}/,
+                /(?<=^|\s)#[\w-]+\s*{[\s\S]*?}/,
+                /(?<=^|\s)@\w+[\s\S]*?{[\s\S]*?}/,
+                /React\.createElement\([\s\S]*?\)/,
+                /const\s+\w+\s*=\s*styled\.[\s\S]*?`[\s\S]*?`/,
+                /import\s+.*\s+from\s+['"].*['"]/,
+                /export\s+.*{[\s\S]*?}/
             ],
-            caseSensitive: true,   // Important for template tags
-            customAttrAssign: [/=/], // Preserve React props
-            preventAttributesEscaping: true, // Important for React/JSX
-            processScripts: ['application/ld+json'], // Process JSON-LD
-            minifyURLs: false, // Don't minify URLs to prevent breaking paths
+            caseSensitive: true,
+            customAttrAssign: [/=/],
+            preventAttributesEscaping: true,
+            processScripts: ['application/ld+json'],
+            minifyURLs: false,
             preserveLineBreaks: false,
-            conservativeCollapse: true, // More conservative whitespace collapse
-            quoteCharacter: "'", // Use single quotes for consistency
+            conservativeCollapse: true,
+            quoteCharacter: "'",
         });
         
         const outputContent = `<!--${BANNER}-->\n${result}`;
@@ -140,7 +139,6 @@ async function minifyHTML(inputPath, outputPath) {
 
 async function processDirectory(inputDir, outputDir) {
     try {
-        // Create output directory if it doesn't exist
         await fs.mkdir(outputDir, { recursive: true });
         
         const files = await fs.readdir(inputDir);
@@ -168,7 +166,6 @@ async function processDirectory(inputDir, outputDir) {
                         await minifyHTML(inputPath, outputPath);
                         break;
                     default:
-                        // Copy other files as-is
                         await fs.copyFile(inputPath, outputPath);
                         console.log(`Copied: ${outputPath}`);
                 }
@@ -179,7 +176,6 @@ async function processDirectory(inputDir, outputDir) {
     }
 }
 
-// Example usage
 async function main() {
     const inputDir = './src';
     const outputDir = './dist';
@@ -188,14 +184,5 @@ async function main() {
     await processDirectory(inputDir, outputDir);
     console.log('Minification complete!');
 }
-
-// Add to package.json:
-// {
-//   "dependencies": {
-//     "terser": "^5.16.0",
-//     "clean-css": "^5.3.2",
-//     "html-minifier-terser": "^7.2.0"
-//   }
-// }
 
 main().catch(console.error);
