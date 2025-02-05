@@ -43,7 +43,7 @@ npm install
 ### Basic Usage
 
 ```bash
-node MINI-Polar.js
+node minipolar.js
 ```
 
 ### Directory Structure
